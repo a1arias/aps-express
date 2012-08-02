@@ -1,0 +1,3 @@
+[submodule "public/mobipf"]
+	path = public/mobipf
+	url = git@bitbucket.org:a_arias/mobipf.git
