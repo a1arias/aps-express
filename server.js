@@ -85,7 +85,6 @@ app.configure(function(){
   app.use(express.directory(__dirname + '/public'));
 });
 
-debugger;
 require('./bootloader')(app, db);
 
 app.configure('development', function(){
