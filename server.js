@@ -4,7 +4,7 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
+  //, routes = require('./routes')
   , db = { users: [] }
   , http = require('http');
 
@@ -85,13 +85,14 @@ app.configure(function(){
   app.use(express.directory(__dirname + '/public'));
 });
 
+debugger;
 require('./bootloader')(app, db);
 
 app.configure('development', function(){
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
-app.get('/', routes.index);
+//app.get('/', routes.index);
 
 // last non-error-handling middleware used 
 // is assumed to be 404
