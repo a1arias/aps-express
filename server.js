@@ -8,7 +8,7 @@ var express = require('express')
 	RedisStore = require('connect-redis')(express),
 	hash = require('./lib/pass').hash,
 	auth = require('./lib/auth'),
-	//mongoose = require('mongoose'),
+	mongoose = require('mongoose'),
 	//db = require('./db'),
 	http = require('http');
 
@@ -139,7 +139,7 @@ app.configure(function(){
 
 app.configure('development', function(){
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-	//mongoose.connect('mongodb://localhost/aps-dev');
+	mongoose.connect('mongodb://localhost/aps-express-dev');
 });
 
 // resourse route loader

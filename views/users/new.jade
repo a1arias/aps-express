@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+	div#new-user
+		form(action='/users', method='post')
+			div
+				label(for='user[name]') name
+				input(type='text', id='user[name]', name='user[name]')
+			div
+				label(for='user[pass1]') password
+				input(type='password', id='user[pass1]', name='user[pass1]')
+			div
+				label(for='user[pass2]') confirm password
+				input(type='password', id='user[pass2]', name='user[pass2]')
+			div
+				input(type='submit', value='Create')

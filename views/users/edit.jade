@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+	div#useredit
+		form
+			div
+				label(for='name') username
+				input(type='text', value=user.name)
+			div
+				label(for='pass') password
+				input(type='password')
+			div
+				input(type='submit',value='Submit')
+	

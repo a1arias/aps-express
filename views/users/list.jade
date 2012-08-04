@@ -1,4 +1,10 @@
 extends ../layout
 
 block content
-	p. poo
+	div#userlist
+		- if(users.length)
+			ul
+				- users.forEach(function(u){
+					li
+						a(href='/users/'+u._id)= u.name
+				-	})

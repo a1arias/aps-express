@@ -37,10 +37,10 @@ module.exports = function(parent, options){
 		// console.log(app.set('views'));
 
 		if(obj.before){
-			path = '/' + name + '/:' + name + '_id';
+			path = '/' + name + '/:_id.:format?';
 			app.all(path, obj.before);
 			verbose && console.log('		ALL %s -> before', path);
-			path = '/' + name + '/:' + name + '_id/*';
+			path = '/' + name + '/:_id/*';
 			app.all(path, obj.before);
 			verbose && console.log('		ALL %s -> before', path);
 		}
@@ -51,30 +51,38 @@ module.exports = function(parent, options){
 			if(~['name', 'prefix', 'engine', 'before', 'restrict'].indexOf(key)) continue;
 
 			switch(key){
-				case 'show':
+				case 'index':
 					method = 'get';
-					path = '/' + name + '/:' + name + '_id';
+					path = '/';
 					break;
-				case 'list':
+				case 'new':
 					method = 'get';
-					// to pluralize the path append 's'
-					path = '/'  + name;
-					break;
-				case 'edit':
-					method = 'get';
-					path = '/' + name + '/:' + name + '_id/edit';
-					break;
-				case 'update':
-					method = 'put';
-					path = '/' + name + '/:' + name + '_id';
+					path = '/' + name + '/new';
 					break;
 				case 'create':
 					method = 'post';
 					path = '/' + name;
 					break;
-				case 'index':
+				case 'show':
 					method = 'get';
-					path = '/';
+					path = '/' + name + '/:_id' + '.:format?';
+					break;
+				case 'list':
+					method = 'get';
+					// to pluralize the path append 's'
+					path = '/'  + name + '.:format?';
+					break;
+				case 'edit':
+					method = 'get';
+					path = '/' + name + '/:_id/edit';
+					break;
+				case 'update':
+					method = 'put';
+					path = '/' + name + '/:_id' + '.:format?';
+					break;
+				case 'destroy':
+					method = 'delete';
+					path = '/' + name + '/:_id' + '.:format?';
 					break;
 				default:
 					throw new Error('unrecognized route: ' + name + '.' + key);

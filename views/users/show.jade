@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+	h2= user.name
+	h3 salt
+	pre= user.salt
+	h3 hash
+	pre= user.hash
+	form(method='post', action='/users/'+user._id)
+		input(type='hidden', name='_method', value='delete')
+		input(type='submit', value='Delete')
+
