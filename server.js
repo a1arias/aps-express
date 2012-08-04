@@ -8,24 +8,25 @@ var express = require('express')
 	RedisStore = require('connect-redis')(express),
 	hash = require('./lib/pass').hash,
 	auth = require('./lib/auth'),
-	db = require('./db'),
+	//mongoose = require('mongoose'),
+	//db = require('./db'),
 	http = require('http');
 
 var app = module.exports = express();
 
 // resource route factory method
 // TODO: add PUT and POST methods to Edit and Create resources
-app.resource = function(path, obj){
-	this.get(path, obj.index);
-	this.get(path + '/:a..:b.:format?', function(req, res){
-		var a = parseInt(req.params.a, 10),
-			b = parseInt(req.params.b, 10),
-			format = req.params.format;
-		obj.range(req, res, a, b, format);
-	});
-	this.get(path + '/:id', obj.show);
-	this.del(path + '/:id', obj.destroy);
-};
+// app.resource = function(path, obj){
+// 	this.get(path, obj.index);
+// 	this.get(path + '/:a..:b.:format?', function(req, res){
+// 		var a = parseInt(req.params.a, 10),
+// 			b = parseInt(req.params.b, 10),
+// 			format = req.params.format;
+// 		obj.range(req, res, a, b, format);
+// 	});
+// 	this.get(path + '/:id', obj.show);
+// 	this.del(path + '/:id', obj.destroy);
+// };
 
 // res.message() method 
 // which stores messages in the session
@@ -53,39 +54,39 @@ app.response.message = function(msg){
 // var users = {
 // 	tj: {name: 'tj'}
 // };
-var users = db.users;
+//var users = db.users;
 
 // fake controller
 // TODO: move this off to routes and setup a loader
-var User = {
-	index: function(req, res){
-		res.send(users);
-	},
-	show: function(req, res){
-		res.send(users[req.params.id] || { error: 'Cannot find user' });
-	},
-	destroy: function(req, res){
-		var id = req.params.id;
-		var destroyed = id in users;
-		delete users[id];
-		res.send(destroyed ? 'destroyed' : 'Cannot find user');
-	},
-	range: function(req, res, a, b, format){
-		var range = users.slice(a, b + 1);
-		switch (format) {
-			case 'json':
-				res.send(range);
-				break;
-			case 'html':
-			default:
-				var html = '<ul>' + range.map(function(user){
-					return '<li>' + user.name + '</li>';
-				}).join('\n') + '</ul>';
-				res.send(html);
-				break;
-		}
-	}
-};
+// var User = {
+// 	index: function(req, res){
+// 		res.send(users);
+// 	},
+// 	show: function(req, res){
+// 		res.send(users[req.params.id] || { error: 'Cannot find user' });
+// 	},
+// 	destroy: function(req, res){
+// 		var id = req.params.id;
+// 		var destroyed = id in users;
+// 		delete users[id];
+// 		res.send(destroyed ? 'destroyed' : 'Cannot find user');
+// 	},
+// 	range: function(req, res, a, b, format){
+// 		var range = users.slice(a, b + 1);
+// 		switch (format) {
+// 			case 'json':
+// 				res.send(range);
+// 				break;
+// 			case 'html':
+// 			default:
+// 				var html = '<ul>' + range.map(function(user){
+// 					return '<li>' + user.name + '</li>';
+// 				}).join('\n') + '</ul>';
+// 				res.send(html);
+// 				break;
+// 		}
+// 	}
+// };
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 3000);
@@ -126,6 +127,8 @@ app.configure(function(){
 		req.session.messages = [];
 		next();
 	});
+	//require('./bootloader')(app, db);
+	require('./bootloader')(app, {verbose: !module.parent});
 	// All additional routes must be loaded/resourced/defined after app.router
 	app.use(app.router);
 	app.use(require('stylus').middleware(__dirname + '/public'));
@@ -133,8 +136,11 @@ app.configure(function(){
 	app.use(express.directory(__dirname + '/public'));
 });
 
-//require('./bootloader')(app, db);
-require('./bootloader')(app, {verbose: !module.parent});
+
+app.configure('development', function(){
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+	//mongoose.connect('mongodb://localhost/aps-dev');
+});
 
 // resourse route loader
 //app.resource('/users', User);
@@ -223,10 +229,6 @@ app.post('/login', function(req, res){
 			res.redirect('login');
 		}
 	});
-});
-
-app.configure('development', function(){
-	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 //app.get('/', routes.index);
