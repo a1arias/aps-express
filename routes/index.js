@@ -1,8 +1,5 @@
+//exports.name = 'home';
 
-/*
- * GET home page.
- */
-
-app.get('/', function(req, res){
+exports.index = function(req, res){
   res.render('index', { title: 'SoFlo Solutions' });
-});
+};

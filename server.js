@@ -5,14 +5,16 @@
 
 var express = require('express')
 	//, routes = require('./routes')
-	, RedisStore = require('connect-redis')(express)
-	, hash = require('./lib/pass').hash
-	, db = { users: [] }
-	, http = require('http');
+	RedisStore = require('connect-redis')(express),
+	hash = require('./lib/pass').hash,
+	auth = require('./lib/auth'),
+	db = require('./db'),
+	http = require('http');
 
 var app = module.exports = express();
 
 // resource route factory method
+// TODO: add PUT and POST methods to Edit and Create resources
 app.resource = function(path, obj){
 	this.get(path, obj.index);
 	this.get(path + '/:a..:b.:format?', function(req, res){
@@ -23,6 +25,15 @@ app.resource = function(path, obj){
 	});
 	this.get(path + '/:id', obj.show);
 	this.del(path + '/:id', obj.destroy);
+};
+
+// res.message() method 
+// which stores messages in the session
+app.response.message = function(msg){
+	var sess = this.req.session;
+	sess.messages = sess.messages || [];
+	sess.messages.push(msg);
+	return this;
 };
 
 // fake records
@@ -39,9 +50,10 @@ app.resource = function(path, obj){
 // 	{ name: 'simon' },
 // 	{ name: 'tobi' }
 // ];
-var users = {
-	tj: {name: 'tj'}
-};
+// var users = {
+// 	tj: {name: 'tj'}
+// };
+var users = db.users;
 
 // fake controller
 // TODO: move this off to routes and setup a loader
@@ -89,14 +101,29 @@ app.configure(function(){
 		store: new RedisStore({ pass: 'PushStrangeWorld' }) 
 	}));
 	// session-persisted message middleware
+	// app.use(function(req, res, next){
+	// 	var err = req.session.error,
+	// 			msg = req.session.success;
+	// 	delete req.session.error;
+	// 	delete req.session.success;
+	// 	res.locals.message = '';
+	// 	if (err) res.locals.message = '<p class="msg error">' + err + '</p>';
+	// 	if (msg) res.locals.message = '<p class="msg success">' + msg + '</p>';
+	// 	next();
+	// });
+
 	app.use(function(req, res, next){
-		var err = req.session.error,
-				msg = req.session.success;
-		delete req.session.error;
-		delete req.session.success;
-		res.locals.message = '';
-		if (err) res.locals.message = '<p class="msg error">' + err + '</p>';
-		if (msg) res.locals.message = '<p class="msg success">' + msg + '</p>';
+		var msgs = req.session.messages || [];
+		res.locals.messages = msgs;
+		res.locals.hasMessages = !! msgs.length;
+		/*
+		 * this is the equivalent:
+			res.locals({
+				messages: msgs,
+				hasMessages: !!msgs.length
+			});
+		 */
+		req.session.messages = [];
 		next();
 	});
 	// All additional routes must be loaded/resourced/defined after app.router
@@ -106,40 +133,46 @@ app.configure(function(){
 	app.use(express.directory(__dirname + '/public'));
 });
 
+//require('./bootloader')(app, db);
+require('./bootloader')(app, {verbose: !module.parent});
+
 // resourse route loader
-app.resource('/users', User);
+//app.resource('/users', User);
 
-hash('foobar', function(err, salt, hash){
-	if(err) throw err;
-	users.tj.salt = salt;
-	users.tj.hash = hash;
-});
+// hash('foobar', function(err, salt, hash){
+// 	if(err) throw err;
+// 	users.tj.salt = salt;
+// 	users.tj.hash = hash;
+// });
 
-// TODO: move this to use a real database
-function authenticate(name, pass, fn){
-	if(!module.parent) console.log('authenticating %s:%s', name, pass);
-	var user = users[name];
-	// query the db for the given username
-	if(!user) return fn(new Error('cannot find user'));
-	// apply the same algorithm to the POSTed password, applying
-	// the hash against the pass/salt, if there is a match we
-	// found the user
-	hash(pass, user.salt, function(err, hash){
-		if(err) return fn(err);
-		if(hash == user.hash) return fn(null, user);
-		fn(new Error('invalid password'));
-	});
-};
+// // TODO: move this to use a real database
+// function authenticate(name, pass, fn){
+// 	if(!module.parent) console.log('authenticating %s:%s', name, pass);
+// 	var user = users[name];
+// 	// query the db for the given username
+// 	if(!user) return fn(new Error('cannot find user'));
+// 	// apply the same algorithm to the POSTed password, applying
+// 	// the hash against the pass/salt, if there is a match we
+// 	// found the user
+// 	hash(pass, user.salt, function(err, hash){
+// 		if(err) return fn(err);
+// 		if(hash == user.hash) return fn(null, user);
+// 		fn(new Error('invalid password'));
+// 	});
+// };
 
-// method to restrict access to a given route
-function restrict(req, res, next){
-	if(req.session.user){
-		next();
-	} else {
-		req.session.error = 'Access denied!';
-		res.redirect('/login');
-	}
-};
+// // method to restrict access to a given route
+// function restrict(req, res, next){
+// 	if(req.session.user){
+// 		next();
+// 	} else {
+// 		req.session.error = 'Access denied!';
+// 		res.redirect('/login');
+// 	}
+// };
+
+var restrict = auth.restrict,
+	authenticate = auth.authenticate;
 
 // simple test route to check auth middleware
 app.get('/restricted', restrict, function(req, res){
@@ -191,8 +224,6 @@ app.post('/login', function(req, res){
 		}
 	});
 });
-
-require('./bootloader')(app, db);
 
 app.configure('development', function(){
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
