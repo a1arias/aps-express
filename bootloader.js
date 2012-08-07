@@ -90,7 +90,11 @@ module.exports = function(parent, options){
 
 			path = prefix + path;
 			if(restrict){
-				app[method](path, restrict, obj[key]);
+				if(key == 'new'){
+					app[method](path, obj[key]);
+				} else {
+					app[method](path, restrict, obj[key]);
+				}
 			} else {
 				app[method](path, obj[key]);
 			}

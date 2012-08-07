@@ -29,9 +29,21 @@ exports.before = function(req, res, next){
 };
 
 exports.new = function(req, res){
-	res.render('users/new', {
-		title: 'Create user'
-	});
+	switch(req.hxr){
+		case 'json':
+			// TODO: implement validation and reply with proper resopose
+			res.json({});
+		case 'html':
+		default:
+			debugger;
+			if(req.xhr){
+				res.render('bbui/users/new')
+			} else {
+				res.render('users/new', {
+					title: 'Create user'
+				});
+			}
+	}
 };
 
 exports.create = function(req, res){
