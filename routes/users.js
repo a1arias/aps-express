@@ -49,9 +49,17 @@ exports.new = function(req, res){
 exports.create = function(req, res){
 	debugger;
 	// TODO: save to mongodb
-	console.log('user %s saved', req.body.user.name);
+	console.log('user %s saved', req.body.first_name);
 	
-	db.users.createUser(req.body.user, function(err, user){
+	var newUser = {
+		first_name: req.body.first_name,
+		last_name: req.body.last_name,
+		email: req.body.email,
+		dob: req.body.dob,
+		password: req.body.password1
+	};
+
+	db.users.createUser(newUser, function(err, user){
 		if(!err){
 			res.render('users/show', {
 				user: user,

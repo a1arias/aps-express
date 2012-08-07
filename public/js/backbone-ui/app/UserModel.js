@@ -10,9 +10,12 @@ define('UserModel', [
 		url: function(){
 			var url;
 
-			if(!this.isNew()){
+			debugger;
+			// if the model is new, post to /users
+			if(this.isNew()){
 				url = '/users/'
 			} else {
+				// else get the collection
 				url = '/users.json'
 			}
 			return url

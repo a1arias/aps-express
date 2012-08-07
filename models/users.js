@@ -10,7 +10,8 @@ var ns = hash('foobar', function(err, salt, hash){
 });
 
 var UserSchema = new Schema({
-	name: { type: String, index: true, lowercase: true },
+	first_name: { type: String, index: true, lowercase: true },
+	last_name: { type: String, index: true, lowercase: true },
 	salt: { type: String },
 	hash: { type: String }
 });

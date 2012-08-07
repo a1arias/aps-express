@@ -28,8 +28,11 @@ users.all = function(){
 users.createUser = function(user, fn){
 	debugger;
 	var u = new Users();
-	u.name = user.name;
-	hash(user.pass1, function(err, salt, hash){
+	u.first_name = user.first_name;
+	u.last_name = user.last_name;
+	u.email = user.email;
+	u.dob = user.dob;
+	hash(user.password, function(err, salt, hash){
 		if(err) return fn(err);
 
 		u.salt = salt;
@@ -47,10 +50,11 @@ users.destroy = function(id, fn){
 	});
 };
 
-users.oneByName = function(name){
+users.oneByEmail = function(email, fn){
 	debugger;
-	Users.findOne({ name: name }, function(err, doc){
-		return doc;
+	Users.findOne({ email: email }, function(err, doc){
+		if(err) return fn(err, null);
+		return fn(null, doc);
 	});
 };
 

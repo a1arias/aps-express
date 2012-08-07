@@ -90,7 +90,9 @@ module.exports = function(parent, options){
 
 			path = prefix + path;
 			if(restrict){
-				if(key == 'new'){
+				// new users need to be able to create accounts
+				// TODO: optimize this
+				if(key == 'new' || key == 'create'){
 					app[method](path, obj[key]);
 				} else {
 					app[method](path, restrict, obj[key]);

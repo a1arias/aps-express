@@ -1,5 +1,10 @@
 extends layout
 
+block css
+			link(rel='stylesheet', href='/stylesheets/style.css')
+		block scripts
+			script(data-main='js/backbone-ui/main', src='js/backbone-ui/lib/require.js')
+			
 block content
 	header
 	div.container

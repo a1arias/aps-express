@@ -212,7 +212,7 @@ app.get('/login', function(req, res){
 
 app.post('/login', function(req, res){
 	debugger;
-	authenticate(req.body.username, req.body.password, function(err, user){
+	authenticate(req.body.email, req.body.password, function(err, user){
 		if(user){
 			// Regenerate session when signing in to prevent fixation
 			req.session.regenerate(function(){
@@ -220,12 +220,10 @@ app.post('/login', function(req, res){
 				// in the session store to be retreived,
 				// or in this case the entire user object
 				req.session.user = user;
-				res.redirect('back');
+				res.redirect('/restricted');
 			});
 		} else {
-			req.session.error = 'Authentication failed, please check your '
-				+ ' username and password.'
-				+ ' (use "tj" and "foobar")';
+			req.session.error = err;
 			res.redirect('login');
 		}
 	});

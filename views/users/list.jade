@@ -6,5 +6,5 @@ block content
 			ul
 				- users.forEach(function(u){
 					li
-						a(href='/users/'+u._id)= u.name
+						a(href='/users/'+u._id)= u.first_name + ' ' + u.last_name
 				-	})

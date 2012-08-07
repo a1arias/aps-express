@@ -1,62 +1,14 @@
-div.row
-	div.span8
-		div.page-header
-			h1 User Registration
-		form.form-horizontal
-			fieldset
-				div.control-group
-					label(for="fname-input", class="control-label") First Name
-					div.controls
-						div.input-prepend
-							span.add-on
-								i.icon-user
-							input(type="text", class="input-xlarge", id="fname-input", value="")
-							p.help-block Enter first name above, has to be between 2 and 100 chars.
-				div.control-group
-					label(for="lnname-input", class="control-label") Last Name
-					div.controls
-						div.input-prepend
-							span.add-on
-								i.icon-user
-							input(type="text", class="input-xlarge", id="lname-input", value="")
-							p.help-block Enter last name above. Has to be between 2 and 100 chars.
-				div.control-group
-					label(for="email-input", class="control-label") Email
-					div.controls
-						div.input-prepend
-							span.add-on
-								i.icon-envelope
-							input(type="text", class="input-xlarge", id="email-input", value="")
-							p.help-block Enter a valid email above.
-				div.control-group
-					label(for="password1-input", class="control-label") Password
-					div.controls
-						div.input-prepend
-							span.add-on
-								i.icon-lock
-							input(type="password", class="input-xlarge", id="password1-input", value="")
-							p.help-block Enter password has to be between 7 and 100 chars.
-				div.control-group
-					label(for="password2-input", class="control-label") Confirm Password
-					div.controls
-						div.input-prepend
-							span.add-on
-								i.icon-lock
-							input(type="password", class="input-xlarge", id="password2-input", value="")
-							p.help-block Enter the same password again.
-				div.control-group
-					label(for="dob-input", class="control-label") Date of Birth
-					div.controls
-						div.input-prepend
-							span.add-on
-								i.icon-time
-							input(type="text", class="input-xlarge", id="dob-input", value="")
-							p.help-block
-								| Enter birthdate above, using the following format: MM/DD/YYYY.
-								br
-								| Example: 08/18/1986. 
-								br
-								| User has to be above 18 years old.
-					div.form-actions
-						a.btn.save-btn Save
-						a.btn.back-btn Back
+extends layout
+
+block content
+	p= locals.message
+	p= locals.error
+	form(action='/login', method='POST')
+		div
+			label(for='email') email address
+			input(type='text', name='email', id='email')
+		div
+			label(for='password') password
+			input(type='password', name='password', id='password')
+		div
+			input(type='submit')
