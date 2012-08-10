@@ -6,11 +6,12 @@ define('Router', [
 	'HomeView',
 	'_404View',
 	'UserNewView',
-	'UserModel'
+	'UserModel',
+	'UserListView'
 ], function($, _, BackBone, 
 		HeaderView, HomeView, 
 		_404View, 
-		UserNewView, UserModel
+		UserNewView, UserModel, UserListView
 	){
 		var AppRouter,
 			initialize;
@@ -20,6 +21,7 @@ define('Router', [
 				'': 'home',
 				'!/home': 'home',
 				'!/users/new': 'newUser',
+				'!/users': 'listUsers',
 				'*poo': '_404'
 			},
 
@@ -69,6 +71,19 @@ define('Router', [
 
 				view.model.on('save-success', function(id){
 					delete view; that.navigate('#!/users/'+id, {trigger: true});
+				});
+			},
+
+			listUsers: function(){
+				var that = this;
+
+				this.headerView.select('list-menu');
+
+				if(!this.userListView){
+					this.userListView = new UserListView();
+				}
+				this.userListView.render(function(){
+					that.elms['page-content'].html(that.userListView.el);
 				});
 			}
 		});

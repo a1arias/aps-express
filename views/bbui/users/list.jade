@@ -1,0 +1,8 @@
+block content
+	div#userlist
+		- if(users.length)
+			ul
+				- users.forEach(function(u){
+					li
+						a(href='/users/'+u._id)= u.first_name + ' ' + u.last_name
+				-	})

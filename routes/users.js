@@ -78,15 +78,27 @@ exports.list = function(req, res){
 				var format = req.params.format;
 				switch(format){
 					case 'json':
-					default:
 						res.send(docs);
-
+						break;
+					default:
+						res.render('users/list', {
+							title: 'User List',
+							users: docs
+						});
+						break;
 				};
 			} else {
-				res.render('users/list', {
-					users: docs,
-					title: 'User list'
-				});
+				if(req.xhr){
+					res.render('bbui/users/list', {
+						users: docs,
+						title: 'User list'
+					});
+				} else {
+					res.render('users/list', {
+						users: docs,
+						title: 'User list'
+					});
+				}
 			}
 		} else {
 			throw new Error(err);
