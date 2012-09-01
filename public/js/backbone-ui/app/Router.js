@@ -5,12 +5,14 @@ define('Router', [
 	'HeaderView',
 	'HomeView',
 	'_404View',
+	'LoginView',
+	'LoginModel',
 	'UserNewView',
 	'UserModel',
 	'UserListView'
 ], function($, _, BackBone, 
 		HeaderView, HomeView, 
-		_404View, 
+		_404View, LoginView, LoginModel, 
 		UserNewView, UserModel, UserListView
 	){
 		var AppRouter,
@@ -22,6 +24,7 @@ define('Router', [
 				'!/home': 'home',
 				'!/users/new': 'newUser',
 				'!/users': 'listUsers',
+				'!/login': 'login',
 				'*poo': '_404'
 			},
 
@@ -30,12 +33,32 @@ define('Router', [
 					'page-content': $('.page-content')
 				};
 				
-				this.headerView = new HeaderView();
+				var that = this, model, view;
+				model = new LoginModel();
+				this.headerView = view = new HeaderView({model: model});
+
+				view.model.on('loginSuccess', function(){
+					delete view; that.navigate('#!/portal', {trigger: true, replace: true});
+				});
+
 				$('header').hide()
 					.html(this.headerView.render().el)
 					.fadeIn('slow');
 
 				$('footer').fadeIn('slow');
+			},
+
+			login: function(){
+				this.headerView.select();
+				if(!this.loginView){
+					this.loginView = new LoginView();
+				}
+
+				var model, view;
+				model = new LoginModel();
+				view = new LoginView({model: model});
+
+				this.elms['page-content'].html(view.render().el);
 			},
 
 			home: function(){

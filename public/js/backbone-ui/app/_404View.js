@@ -2,7 +2,7 @@ define('_404View', [
 	'jquery',
 	'underscore',
 	'backbone',
-	'text!../tpl/poo.html'
+	'text!../tpl/404.html'
 ], function($, _, BackBone, tpl){
 	var _404View;
 

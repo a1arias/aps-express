@@ -7,7 +7,6 @@ exports.name = 'users';
 exports.restrict = restrict;
 
 exports.before = function(req, res, next){
-	debugger;
 	// id is not really an id, bootloader:43 causes this
 	var id = req.params._id;
 	if(!id || id == 'new') return next();
@@ -29,13 +28,12 @@ exports.before = function(req, res, next){
 };
 
 exports.new = function(req, res){
-	switch(req.hxr){
+	switch(req.format){
 		case 'json':
 			// TODO: implement validation and reply with proper resopose
 			res.json({});
 		case 'html':
 		default:
-			debugger;
 			if(req.xhr){
 				res.render('bbui/users/new')
 			} else {

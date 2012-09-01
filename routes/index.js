@@ -1,7 +1,6 @@
 //exports.name = 'home';
 
 exports.index = function(req, res){
-	debugger;
 	switch(req.format){
 		case 'json':
 			res.json({});

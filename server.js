@@ -200,19 +200,25 @@ app.get('/login', function(req, res){
 			+ ' You may now access <a href="/restricted">/restricted</a>.';
 	}
 	// if it gets this far, the session is not valid, login
-	debugger;
-	res.render('login', {
-		title: 'Login',
-		locals: {
+	// TODO: huge problem here. this should present the bbui/login screen if xhr
+	if(req.xhr){
+		res.render('bbui/users/login', {
+			title: 'Login',
+			error: req.session.error,
+			message: req.session.success	
+		})
+	} else {
+		res.render('login', {
+			title: 'Login',
 			error: req.session.error,
 			message: req.session.success
-		}
-	});
+		});
+	}
 });
 
 app.post('/login', function(req, res){
-	debugger;
 	authenticate(req.body.email, req.body.password, function(err, user){
+		debugger;
 		if(user){
 			// Regenerate session when signing in to prevent fixation
 			req.session.regenerate(function(){
@@ -220,11 +226,24 @@ app.post('/login', function(req, res){
 				// in the session store to be retreived,
 				// or in this case the entire user object
 				req.session.user = user;
-				res.redirect('/restricted');
+				if(req.xhr){
+					res.json({
+						success: true
+					}, 200);
+				} else {
+					res.redirect('/restricted');
+				}
 			});
 		} else {
 			req.session.error = err;
-			res.redirect('login');
+			if(req.xhr){
+				res.json({
+					success: false,
+					err: err
+				}, 403)
+			} else {
+				res.redirect('login');
+			}
 		}
 	});
 });

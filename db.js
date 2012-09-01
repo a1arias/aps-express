@@ -26,7 +26,6 @@ users.all = function(){
 };
 
 users.createUser = function(user, fn){
-	debugger;
 	var u = new Users();
 	u.first_name = user.first_name;
 	u.last_name = user.last_name;
@@ -51,7 +50,6 @@ users.destroy = function(id, fn){
 };
 
 users.oneByEmail = function(email, fn){
-	debugger;
 	Users.findOne({ email: email }, function(err, doc){
 		if(err) return fn(err, null);
 		return fn(null, doc);

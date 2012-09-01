@@ -1,9 +1,7 @@
-extends layout
-
 block content
-	p= locals.message
-	p= locals.error
-	form(action='/login', method='POST')
+	p.message= locals.message
+	p.error= locals.error
+	form(id='login', action='/login', method='POST')
 		div
 			label(for='email') email address
 			input(type='text', name='email', id='email')
@@ -11,4 +9,4 @@ block content
 			label(for='password') password
 			input(type='password', name='password', id='password')
 		div
-			input(type='submit')
+			input(type='submit', id='loginbtn')

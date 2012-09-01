@@ -1,8 +1,7 @@
 extends layout
 
 block content
-	p= locals.message
-	p= locals.error
+	p.error= error
 	form(action='/login', method='POST')
 		div
 			label(for='email') email address
