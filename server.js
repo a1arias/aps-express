@@ -10,7 +10,8 @@ var express = require('express')
 	auth = require('./lib/auth'),
 	mongoose = require('mongoose'),
 	//db = require('./db'),
-	http = require('http');
+	http = require('http'),
+	jade = require('jade');
 
 var app = module.exports = express();
 
@@ -180,6 +181,17 @@ app.configure('development', function(){
 var restrict = auth.restrict,
 	authenticate = auth.authenticate;
 
+app.get('/header', function(req, res){
+	if(req.xhr){
+		res.render('bbui/header');
+	} else {
+		res.render('404', {
+			title: '404 - Not Found',
+			url: req.url,
+			status: 404
+		});
+	}
+})
 // simple test route to check auth middleware
 app.get('/restricted', restrict, function(req, res){
 	res.send('Wahoo! restricted area');

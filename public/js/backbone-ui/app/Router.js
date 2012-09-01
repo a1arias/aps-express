@@ -24,6 +24,8 @@ define('Router', [
 				'!/home': 'home',
 				'!/users/new': 'newUser',
 				'!/users': 'listUsers',
+				// TODO: implement showUser
+				//'!/users/:id': 'showUser',
 				'!/login': 'login',
 				'*poo': '_404'
 			},

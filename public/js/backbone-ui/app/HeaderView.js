@@ -2,7 +2,7 @@ define('HeaderView', [
 	'jquery',
 	'underscore',
 	'backbone',
-	'text!../tpl/header.html'
+	'text!../../../header'
 ], function($, _, Backbone, tpl){
 	var HeaderView;
 
