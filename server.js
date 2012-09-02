@@ -182,8 +182,16 @@ var restrict = auth.restrict,
 	authenticate = auth.authenticate;
 
 app.get('/header', function(req, res){
+	debugger;
+	
+	//var isAuthed = (req.session.user) ? true : false;
 	if(req.xhr){
-		res.render('bbui/header');
+		if(req.session.user){}
+		res.render('bbui/header', {
+			locals: {
+				session: req.session
+			}
+		});
 	} else {
 		res.render('404', {
 			title: '404 - Not Found',
@@ -191,7 +199,25 @@ app.get('/header', function(req, res){
 			status: 404
 		});
 	}
-})
+});
+
+app.get('/portal', function(req, res){
+	if(req.xhr){
+		res.render('bbui/portal', {
+			title: 'portal',
+			locals: {
+				data: {}
+			}
+		});
+	} else {
+		res.render('bbui/404', {
+			title: '404 - Not Found',
+			url: req.url,
+			status: 404
+		});
+	}
+});
+
 // simple test route to check auth middleware
 app.get('/restricted', restrict, function(req, res){
 	res.send('Wahoo! restricted area');

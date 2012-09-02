@@ -9,11 +9,13 @@ define('Router', [
 	'LoginModel',
 	'UserNewView',
 	'UserModel',
-	'UserListView'
+	'UserListView',
+	'PortalView'
 ], function($, _, BackBone, 
 		HeaderView, HomeView, 
 		_404View, LoginView, LoginModel, 
-		UserNewView, UserModel, UserListView
+		UserNewView, UserModel, UserListView, 
+		PortalView
 	){
 		var AppRouter,
 			initialize;
@@ -27,6 +29,7 @@ define('Router', [
 				// TODO: implement showUser
 				//'!/users/:id': 'showUser',
 				'!/login': 'login',
+				'!/portal': 'showPortal',
 				'*poo': '_404'
 			},
 
@@ -110,6 +113,18 @@ define('Router', [
 				this.userListView.render(function(){
 					that.elms['page-content'].html(that.userListView.el);
 				});
+			},
+
+			showPortal: function(){
+				var that = this, model, view;
+
+				this.headerView.select('portal-menu');
+
+				//model = new PortalModel();
+				//view  = new PortalView({model: model});
+				view  = new PortalView();
+
+				this.elms['page-content'].html(view.render().el);
 			}
 		});
 	
