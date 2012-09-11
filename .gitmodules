@@ -1,3 +1,6 @@
 [submodule "public/mobipf"]
 	path = public/mobipf
 	url = git@bitbucket.org:a_arias/mobipf.git
+[submodule "public/js/backbone-ui"]
+	path = public/js/backbone-ui
+	url = git@bitbucket.org:a_arias/backbone-ui.git
