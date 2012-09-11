@@ -32,6 +32,7 @@ exports.new = function(req, res){
 		case 'json':
 			// TODO: implement validation and reply with proper resopose
 			res.json({});
+			break;
 		case 'html':
 		default:
 			if(req.xhr){

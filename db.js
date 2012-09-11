@@ -1,18 +1,9 @@
 var hash = require('./lib/pass').hash,
-	Users = require('./models/users').User;
-
-// TODO: WTF? move this to user create
-// hash('foobar', function(err, salt, hash){
-// 	if(err) throw err;
-// 	users.tj.salt = salt;
-// 	users.tj.hash = hash;
-// });
-
-// var users = exports.users = {
-// 	tj: {name: 'tj'}
-// };
+	Users = require('./models/users').User,
+	Articles = require('./models/articles').Article;
 
 var users = exports.users = {};
+var articles = exports.articles = {};
 
 users.all = function(){
 	Users.find({}, function(err, docs){
@@ -56,4 +47,23 @@ users.oneByEmail = function(email, fn){
 	});
 };
 
-exports.users;
+articles.all = function(fn){
+	Articles.find({}, function(err, docs){
+		if(!err){
+			return fn(null, docs);
+		} else {
+			return fn(err, null);
+		}
+	});
+};
+
+articles.creatOne = function(article, fn){
+	var a = new Article();
+	a.title = article.title,
+	a.content = article.content;
+	a.createDate = Date.now;
+
+	a.save();
+
+	return fn(null, a);
+};

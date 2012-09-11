@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+	h1= title
+	div#articlelist
+		- if(articles.length)
+			ul
+				- articles.forEach(function(a){
+					li
+						a(href='/articles/'+a._id)= a.title
+				-	})
