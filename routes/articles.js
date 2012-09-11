@@ -60,13 +60,24 @@ exports.create = function(req, res){
 
 exports.list = function(req, res){
 	db.articles.all(function(err, articles){
-		if(err){
-			throw new Error(err);
+		if(req.params.format){
+			var format = req.params.format;
+			switch(format){
+				case 'json':
+					res.send(articles);
+				break;
+				case 
+
+			}
 		} else {
-			res.render('articles/list', {
-				title: 'Articles List',
-				articles: articles
-			});
+			if(err){
+				throw new Error(err);
+			} else {
+				res.render('articles/list', {
+					title: 'Articles List',
+					articles: articles
+				});
+			}
 		}
 	});
 };
