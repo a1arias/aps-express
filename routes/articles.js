@@ -64,9 +64,9 @@ exports.list = function(req, res){
 			var format = req.params.format;
 			switch(format){
 				case 'json':
+				default:
 					res.send(articles);
 				break;
-				case 
 
 			}
 		} else {
