@@ -4,7 +4,16 @@ var Users = require('../models/users').User,
 
 exports.name = 'users';
 
-exports.restrict = restrict;
+exports.restricted = {
+	route: restrict,
+	routes: [
+		'list',
+		'show',
+		'edit',
+		'update',
+		'destroy'
+	]
+};
 
 exports.before = function(req, res, next){
 	// id is not really an id, bootloader:43 causes this

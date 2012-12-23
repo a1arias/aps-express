@@ -4,7 +4,18 @@ var Articles = require('../models/articles').Article,
 
 exports.name = 'articles';
 
-exports.restrict = restrict;
+//exports.restrict = restrict;
+exports.restricted = {
+	route: restrict,
+	routes: [
+		'new',
+		'create',
+		'edit',
+		'update',
+		'destroy'
+	]
+};
+
 
 exports.before = function(req, res, next){
 	var id = req.params._id;

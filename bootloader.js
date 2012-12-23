@@ -24,7 +24,7 @@ module.exports = function(parent, options){
 		verbose && console.log('\n 	%s/%s:', dir,name);
 		var obj = require(dir + '/' + name),
 			name = obj.name || name,
-			restrict = obj.restrict || null,
+			restricted = obj.restricted || null,
 			prefix = obj.prefix || '',
 			app = express(),
 			method,
@@ -48,7 +48,7 @@ module.exports = function(parent, options){
 		// generate routes based on the exported methods
 		for(var key in obj){
 			// reserved exports
-			if(~['name', 'prefix', 'engine', 'before', 'restrict'].indexOf(key)) continue;
+			if(~['name', 'prefix', 'engine', 'before', 'restricted'].indexOf(key)) continue;
 
 			switch(key){
 				case 'index':
@@ -89,17 +89,27 @@ module.exports = function(parent, options){
 			}
 
 			path = prefix + path;
-			if(restrict){
-				// new users need to be able to create accounts
-				// TODO: optimize this
-				if(key == 'new' || key == 'create'){
-					app[method](path, obj[key]);
+			// if(restrict){
+			// 	// new users need to be able to create accounts
+			// 	// TODO: optimize this
+			// 	if(key == 'new' || key == 'create'){
+			// 		app[method](path, obj[key]);
+			// 	} else {
+			// 		app[method](path, restrict, obj[key]);
+			// 	}
+			// } else {
+			// 	app[method](path, obj[key]);
+			// }
+			if(restricted){
+				if(~restricted.routes.indexOf(key)){
+					app[method](path, restricted.route, obj[key]);
 				} else {
-					app[method](path, restrict, obj[key]);
+					app[method](path, obj[key]);
 				}
 			} else {
 				app[method](path, obj[key]);
 			}
+
 			verbose && console.log('		%s %s -> %s', method.toUpperCase(), path, key);
 		}
 

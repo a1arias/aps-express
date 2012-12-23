@@ -181,8 +181,9 @@ app.configure('development', function(){
 var restrict = auth.restrict,
 	authenticate = auth.authenticate;
 
+// TODO: wtf are you putting the header template in an xrh request for?
 app.get('/header', function(req, res){
-	debugger;
+	//debugger;
 	
 	//var isAuthed = (req.session.user) ? true : false;
 	if(req.xhr){
@@ -210,7 +211,7 @@ app.get('/portal', function(req, res){
 			}
 		});
 	} else {
-		res.render('bbui/404', {
+		res.render('404', {
 			title: '404 - Not Found',
 			url: req.url,
 			status: 404
