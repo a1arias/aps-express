@@ -55,9 +55,6 @@ exports.new = function(req, res){
 };
 
 exports.create = function(req, res){
-	debugger;
-	// TODO: save to mongodb
-	console.log('user %s saved', req.body.first_name);
 	
 	var newUser = {
 		first_name: req.body.first_name,
@@ -67,12 +64,20 @@ exports.create = function(req, res){
 		password: req.body.password1
 	};
 
+	//TODO: check if email exists first; only account per email
 	db.users.createUser(newUser, function(err, user){
+		debugger;
 		if(!err){
-			res.render('users/show', {
-				user: user,
-				title: 'User details'
-			});
+			
+			if(req.xhr){
+				req.session.error = "";
+				res.send(user, 201);
+			} else {
+				res.render('users/login', {
+					title: 'User login'
+				});
+			}
+			
 		} else {
 			throw new Error(err);
 		}

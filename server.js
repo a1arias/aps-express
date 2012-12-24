@@ -143,6 +143,11 @@ app.configure('development', function(){
 	mongoose.connect('mongodb://localhost/aps-express-dev');
 });
 
+app.configure('production', function(){
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+	mongoose.connect('mongodb://localhost/aps-express-prod');
+});
+
 // resourse route loader
 //app.resource('/users', User);
 

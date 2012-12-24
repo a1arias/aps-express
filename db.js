@@ -23,6 +23,7 @@ users.createUser = function(user, fn){
 	u.email = user.email;
 	u.dob = user.dob;
 	hash(user.password, function(err, salt, hash){
+		debugger;
 		if(err) return fn(err);
 
 		u.salt = salt;

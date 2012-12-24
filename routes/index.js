@@ -6,7 +6,6 @@ exports.index = function(req, res){
 			res.json({});
 		default:
 			if(req.xhr){
-				debugger;
 				res.render('bbui/index', {
 					title: 'SoFlo Solutions'
 				});
