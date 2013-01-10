@@ -29,8 +29,26 @@ define('LoginView', [
 				u.email = $.trim(this.$el.find('#email').val());
 				u.password = $.trim(this.$el.find('#password').val());
 
-				debugger;
-				this.model.save(u);
+				debugger;this.model.save(u,{
+				silent: false,
+				sync: true,
+				success: function(model, res){
+					if(res && res.errors){
+						that.renderErrMsg(res.errors);
+					} else {
+						model.trigger('loginSuccess');
+					}
+				},
+				error: function(model, res){
+					if(res && res.errors){
+						that.renderErrMsg(res.errors);
+					} else if(res.status === 404) {
+						// TODO: show 404 view
+					} else if(res.status === 500) {
+						// TODO: show 500 view
+					}
+				}
+			});
 			}
 		});
 

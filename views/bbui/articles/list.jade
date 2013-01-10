@@ -1,0 +1,12 @@
+block content
+	div#articlelist
+		- if(articles.length)
+			ul
+				- articles.forEach(function(a){
+					li
+						div
+							a(href='/articles/'+a._id)= a.title
+						p= a.content
+				-	})
+		- else
+			h3 No Articles

@@ -10,15 +10,14 @@ define('Router', [
 	'UserNewView',
 	'UserModel',
 	'UserListView',
-	'PortalView'
+	'ArticleListView'
 ], function($, _, BackBone, 
 		HeaderView, HomeView, 
 		_404View, LoginView, LoginModel, 
 		UserNewView, UserModel, UserListView, 
-		PortalView
+		ArticleListView
 	){
-		var AppRouter,
-			initialize;
+		var AppRouter;
 
 		AppRouter = BackBone.Router.extend({
 			routes: {
@@ -28,7 +27,7 @@ define('Router', [
 				'!/users': 'listUsers',
 				'!/users/:id': 'showUser',
 				'!/login': 'login',
-				'!/portal': 'showPortal',
+				'!/articles': 'listArticles',
 				'*poo': '_404'
 			},
 
@@ -39,10 +38,23 @@ define('Router', [
 				
 				var that = this, model, view;
 				model = new LoginModel();
+
+				// TODO: add secure cookie parser
+
 				this.headerView = view = new HeaderView({model: model});
 
 				view.model.on('loginSuccess', function(){
-					delete view; that.navigate('#!/portal', {trigger: true, replace: true});
+					//delete view; that.navigate('#!/portal', {trigger: true, replace: true});
+					session = model.session;
+					debugger;
+					// TODO: re-render header to display logout link
+					that.navigate('#!/home');
+				});
+
+				UI.eventDispatcher.on('API401', function(){
+					// calling navigate doesn't change the view.
+					//that.navigate('#!/login');
+					that.login();
 				});
 
 				$('header').hide()
@@ -63,6 +75,13 @@ define('Router', [
 				view = new LoginView({model: model});
 
 				this.elms['page-content'].html(view.render().el);
+
+				view.model.on('loginSuccess', function(id){
+					delete view;
+					// TODO: navigate to previous url
+					//that.navigate('#!/users/'+id, {trigger: true});
+					that.navigate('#!/home', {trigger: true});
+				});
 			},
 
 			home: function(){
@@ -120,14 +139,14 @@ define('Router', [
 				// TODO: navigate...
 			},
 
-			showPortal: function(){
+			listArticles: function(){
 				var that = this, model, view;
+				//var viewModel = new ArticleModel();
 
-				this.headerView.select('portal-menu');
+				this.headerView.select('article-menu');
 
-				//model = new PortalModel();
-				//view  = new PortalView({model: model});
-				view  = new PortalView();
+				//view  = new ArticleListView(model: viewModel);
+				view  = new ArticleListView();
 
 				this.elms['page-content'].html(view.render().el);
 			}

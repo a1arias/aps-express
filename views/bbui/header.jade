@@ -13,7 +13,7 @@ div.navbar.navbar-fixed-top
 					li.article-menu
 						a(href="#!/articles") Articles
 				ul.nav.pull-right
-					- if(!locals.isAuthed)
+					- if(!locals.session.user)
 						li.new-menu
 							a(href="#!/users/new") Sign Up
 						li.divider-vertical

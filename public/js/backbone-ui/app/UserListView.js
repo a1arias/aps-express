@@ -17,15 +17,20 @@ define('UserListView', [
 			},
 
 			getData: function(callback){
+				var that = this;
 				this.collection.fetch({
 					success: function(collection){
 						callback(collection);
 					},
 					error: function(coll, res){
-						if(res === 404){
-							// TODO: Handle 404
-						} else if (res.status === 500){
-							// TODO: Handle 500
+						switch(res.status){
+							case 401:
+								UI.eventDispatcher.trigger('API401');
+								break;
+							case 404:
+							case 500:
+							default:
+								break;
 						}
 					}
 				});

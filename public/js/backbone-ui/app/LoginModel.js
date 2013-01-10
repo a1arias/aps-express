@@ -11,8 +11,7 @@ define('LoginModel', [
 				username: '',
 				password: '',
 				remember_me: false,
-				login_failed: false,
-				login_accepted: false
+				session: {}
 			}
 		});
 

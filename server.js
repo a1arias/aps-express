@@ -97,10 +97,12 @@ app.configure(function(){
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
-	app.use(express.cookieParser('your secret here'));
-	app.use(express.session({ 
-		secret: 'test1234', 
-		store: new RedisStore({ pass: 'PushStrangeWorld' }) 
+	app.use(express.cookieParser('TripToItalyComingSoon'));
+	app.use(express.session({
+		key: 'sid',
+		store: new RedisStore({ pass: 'PushStrangeWorld' }),
+		secret: 'TripToItalyComingSoon',
+		cookie: {httpOnly: false, maxAge: 900000 }
 	}));
 	// session-persisted message middleware
 	// app.use(function(req, res, next){
@@ -238,13 +240,13 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/login', function(req, res){
+	
+	// TODO: do something better like redirect the user
 	if(req.session.user){
-		req.session.success = 'Authenticated as ' + req.session.user.name
-			+ ' click to <a href="/logout">logout</a>.'
-			+ ' You may now access <a href="/restricted">/restricted</a>.';
+		res.redirect('/');
 	}
+
 	// if it gets this far, the session is not valid, login
-	// TODO: huge problem here. this should present the bbui/login screen if xhr
 	if(req.xhr){
 		res.render('bbui/users/login', {
 			title: 'Login',
@@ -270,9 +272,13 @@ app.post('/login', function(req, res){
 				// in the session store to be retreived,
 				// or in this case the entire user object
 				req.session.user = user;
+
+				// TODO: generate secure auth cookie
+				
 				if(req.xhr){
 					res.json({
-						success: true
+						success: true,
+						session: req.session.user
 					}, 200);
 				} else {
 					res.redirect('/restricted');
@@ -284,7 +290,7 @@ app.post('/login', function(req, res){
 				res.json({
 					success: false,
 					err: err
-				}, 403)
+				}, 200)
 			} else {
 				res.redirect('login');
 			}

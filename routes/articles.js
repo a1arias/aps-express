@@ -77,8 +77,7 @@ exports.list = function(req, res){
 				case 'json':
 				default:
 					res.send(articles);
-				break;
-
+					break;
 			}
 		} else {
 			if(err){

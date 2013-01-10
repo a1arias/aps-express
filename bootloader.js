@@ -102,6 +102,8 @@ module.exports = function(parent, options){
 			// }
 			if(restricted){
 				if(~restricted.routes.indexOf(key)){
+					// restricted.route: for some reason that's the name
+					// of the middleware method.
 					app[method](path, restricted.route, obj[key]);
 				} else {
 					app[method](path, obj[key]);

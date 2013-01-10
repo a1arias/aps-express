@@ -1,8 +1,11 @@
 block content
 	div#userlist
-		- if(users.length)
-			ul
-				- users.forEach(function(u){
-					li
-						a(href='/users/'+u._id)= u.first_name + ' ' + u.last_name
-				-	})
+		| <% if(users.length > 0){ %>
+		|	<ul>
+		|		<% _.each(users, function(u){ %>
+		|			<li>
+		|				<a href='/users/<%= u._id %>'><%= u.first_name + ' ' + u.last_name %></a>
+		|			</li>
+		|		<% }); %>
+		|	</ul>
+		| <% } %>
