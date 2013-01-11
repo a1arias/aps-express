@@ -264,7 +264,6 @@ app.get('/login', function(req, res){
 
 app.post('/login', function(req, res){
 	authenticate(req.body.email, req.body.password, function(err, user){
-		debugger;
 		if(user){
 			// Regenerate session when signing in to prevent fixation
 			req.session.regenerate(function(){
@@ -289,7 +288,7 @@ app.post('/login', function(req, res){
 			if(req.xhr){
 				res.json({
 					success: false,
-					err: err
+					err: err.toString()
 				}, 200)
 			} else {
 				res.redirect('login');

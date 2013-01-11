@@ -46,15 +46,14 @@ define('Router', [
 				view.model.on('loginSuccess', function(){
 					//delete view; that.navigate('#!/portal', {trigger: true, replace: true});
 					session = model.session;
-					debugger;
 					// TODO: re-render header to display logout link
-					that.navigate('#!/home');
+					that.navigate('#!/home', {trigger: true});
 				});
 
 				UI.eventDispatcher.on('API401', function(){
 					// calling navigate doesn't change the view.
-					//that.navigate('#!/login');
-					that.login();
+					that.navigate('#!/login', {trigger: true});
+					//that.login();
 				});
 
 				$('header').hide()
@@ -70,9 +69,10 @@ define('Router', [
 					this.loginView = new LoginView();
 				}
 
-				var model, view;
+				var model, view, that;
 				model = new LoginModel();
 				view = new LoginView({model: model});
+				that = this;
 
 				this.elms['page-content'].html(view.render().el);
 
