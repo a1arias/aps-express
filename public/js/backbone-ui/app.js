@@ -10,8 +10,6 @@ define('app', [
 
 	var app;
 
-	debugger;
-
 	// this creates make the event channel available to all views.
 	// not sure whether to use this, or a global object
 	//Backbone.View.prototype.eventAggregator = _.extend({}, Backbone.Events);
@@ -33,7 +31,7 @@ define('app', [
 
 		Backbone.history.start();
 
-		Session.initialize();
+		App.Session = Session.create();
 		
 	};
 

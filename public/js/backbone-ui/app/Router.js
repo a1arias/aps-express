@@ -2,6 +2,7 @@ define('Router', [
 	'jquery',
 	'underscore',
 	'backbone',
+	'Session',
 	'HeaderView',
 	'HomeView',
 	'_404View',
@@ -11,7 +12,7 @@ define('Router', [
 	'UserModel',
 	'UserListView',
 	'ArticleListView'
-], function($, _, BackBone, 
+], function($, _, BackBone, Session, 
 		HeaderView, HomeView, 
 		_404View, LoginView, LoginModel, 
 		UserNewView, UserModel, UserListView, 
@@ -54,7 +55,8 @@ define('Router', [
 				// 	that.navigate('#!/home', {trigger: true});
 				// });
 
-				App.EventBus.on('response:401', function(){
+				App.EventBus.on('response:401', function(obj){
+					Session.setItem('lastUrl', obj.hash);
 					/* calling navigate doesn't change the view 
 					 * unless trigger is true.
 					 */
@@ -65,6 +67,8 @@ define('Router', [
 				App.EventBus.on('login:success', function(obj){
 					debugger;
 					that.headerView.render({user: obj.session});
+					that.navigate(Session.getItem('lastUrl'), {trigger: true});
+					Session.removeItem('lastUrl');
 				});
 
 				$('header').hide()

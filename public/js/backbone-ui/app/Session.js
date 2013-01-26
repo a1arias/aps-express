@@ -36,9 +36,30 @@ define('Session', [
 				Session.sessionId = cookies['sid'];
 			}
 		},
-		isAuthed: function(){ return _isAuthed; },
 		create: function(){
-			
+			return _.extend({}, this)
+		},
+		isAuthed: function(){ return _isAuthed; },
+		getItem: function(item){ 
+			if(ENV.WEBSTORAGE_ENABLED){
+				return sessionStorage.getItem(item);
+			} else {
+				return Session[item];
+			}
+		},
+		setItem: function(item, obj){
+			if(ENV.WEBSTORAGE_ENABLED){
+				sessionStorage.setItem(item,obj);
+			} else {
+				Session[item] = obj;
+			}
+		},
+		removeItem: function(item){
+			if(ENV.WEBSTORAGE_ENABLED){
+				sessionStorage.removeItem(item);
+			} else {
+				delete Session[item];
+			}	
 		}
 	};
 

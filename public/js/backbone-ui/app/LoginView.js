@@ -38,7 +38,7 @@ define('LoginView', [
 							that.renderErrMsg(res.errors);
 						} else {
 							App.EventBus.trigger('login:success', { session: res.session });
-							App.Router.navigate('#!/home', {trigger: true});
+							//App.Router.navigate('#!/home', {trigger: true});
 						}
 					},
 					error: function(model, res){
