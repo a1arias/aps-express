@@ -1,9 +1,9 @@
-define('EventDispatcher', [
+define('EventBus', [
 	'underscore',
 	'backbone'
 ], function(_, Backbone){
 	
-	var EventDispatcher,
+	var EventBus,
 		Channel = {};
 
 	function create(){
@@ -15,10 +15,10 @@ define('EventDispatcher', [
 		Channel.off();
 	};
 
-	EventDispatcher = {
+	EventBus = {
 		create: create,
 		destroy: destroy
 	}
 
-	return EventDispatcher;
+	return EventBus;
 });

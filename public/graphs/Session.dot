@@ -1,0 +1,6 @@
+digraph G {
+	Session -> create;
+	Session -> destroy;
+	Session -> getItem;
+	Session -> setItem;
+}

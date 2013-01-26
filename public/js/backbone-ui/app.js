@@ -3,11 +3,14 @@ define('app', [
 	'underscore',
 	'backbone',
 	'Router',
-	'EventDispatcher',
+	'EventBus',
+	'Session',
 	'bootstrap'
-], function($, _, Backbone, Router, EventDispatcher){
+], function($, _, Backbone, Router, EventBus, Session){
 
 	var app;
+
+	debugger;
 
 	// this creates make the event channel available to all views.
 	// not sure whether to use this, or a global object
@@ -15,21 +18,27 @@ define('app', [
 
 	function initialize(){
 
-		// for some reason, Instantiating EventDispatcher doesn't
-		// produce the desired outcome
-		//UI.eventDispatcher = new EventDispatcher();
-		
-		//UI.eventDispatcher = _.extend({}, Backbone.Events);
+		ENV = {};
+		App.EventBus = EventBus.create();
+		App.Router = new Router();
 
-		UI.eventDispatcher = EventDispatcher.create();
-
-		UI.router = new Router();
+		// check if HTML 5 storage API is available
+		if(typeof(Storage) !== 'undefined'){
+			// If so, store the session data in sessionStorage
+			ENV.WEBSTORAGE_ENABLED = true;
+		} else {
+			// If not, store the session data in a global object
+			ENV.WEBSTORAGE_ENABLED = false;
+		}
 
 		Backbone.history.start();
+
+		Session.initialize();
+		
 	};
 
 	function uninitialize(){
-		_ed.destroy();
+		App.EventBus.destroy();
 	}
 
 	app = {

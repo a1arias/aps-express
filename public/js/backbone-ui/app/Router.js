@@ -36,24 +36,35 @@ define('Router', [
 					'page-content': $('.page-content')
 				};
 				
-				var that = this, model, view;
-				model = new LoginModel();
+				var that = this,
+					loginModel = new LoginModel();
 
 				// TODO: add secure cookie parser
 
-				this.headerView = view = new HeaderView({model: model});
+				this.headerView = new HeaderView({ 
+					loginModel: loginModel
+				 });
 
-				view.model.on('loginSuccess', function(){
-					//delete view; that.navigate('#!/portal', {trigger: true, replace: true});
-					session = model.session;
-					// TODO: re-render header to display logout link
-					that.navigate('#!/home', {trigger: true});
-				});
+				// this.headerView.model.on('loginSuccess', function(){
+				// 	// delete that.headerView;
+				// 	// that.headerView = new HeaderView({model: model});
+				// 	that.headerView.render(model);
+				// 	//that.navigate('#!/portal', {trigger: true, replace: true});
+				// 	// TODO: re-render header to display logout link
+				// 	that.navigate('#!/home', {trigger: true});
+				// });
 
-				UI.eventDispatcher.on('API401', function(){
-					// calling navigate doesn't change the view.
+				App.EventBus.on('response:401', function(){
+					/* calling navigate doesn't change the view 
+					 * unless trigger is true.
+					 */
 					that.navigate('#!/login', {trigger: true});
 					//that.login();
+				});
+
+				App.EventBus.on('login:success', function(obj){
+					debugger;
+					that.headerView.render({user: obj.session});
 				});
 
 				$('header').hide()
@@ -76,12 +87,12 @@ define('Router', [
 
 				this.elms['page-content'].html(view.render().el);
 
-				view.model.on('loginSuccess', function(id){
-					delete view;
-					// TODO: navigate to previous url
-					//that.navigate('#!/users/'+id, {trigger: true});
-					that.navigate('#!/home', {trigger: true});
-				});
+				// view.model.on('loginSuccess', function(id){
+				// 	delete view;
+				// 	// TODO: navigate to previous url
+				// 	//that.navigate('#!/users/'+id, {trigger: true});
+				// 	that.navigate('#!/home', {trigger: true});
+				// });
 			},
 
 			home: function(){

@@ -37,7 +37,8 @@ define('LoginView', [
 						if(res && res.errors){
 							that.renderErrMsg(res.errors);
 						} else {
-							model.trigger('loginSuccess');
+							App.EventBus.trigger('login:success', { session: res.session });
+							App.Router.navigate('#!/home', {trigger: true});
 						}
 					},
 					error: function(model, res){

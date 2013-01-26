@@ -2,7 +2,7 @@ define('HeaderView', [
 	'jquery',
 	'underscore',
 	'backbone',
-	'text!../../../header'
+	'text!../tpl/header.html'
 ], function($, _, Backbone, tpl){
 	var HeaderView;
 
@@ -21,8 +21,9 @@ define('HeaderView', [
 
 			$('#navbar').scrollspy();
 		},
-		render: function(){
-			$(this.el).html(this.template());
+		render: function(obj){
+			this.template = _.template(tpl, obj)
+			$(this.el).html(this.template);
 			return this;
 		},
 		select: function(item){
@@ -44,14 +45,14 @@ define('HeaderView', [
 			u.email = $.trim(this.$el.find('#email').val());
 			u.password = $.trim(this.$el.find('#password').val());
 
-			/* calling model.save POSTs the offered creds to the server
+			/* calling model.save POSTs the provided creds to the server
 			 * for verification. If an HTTP code other than 2xx is returned,
 			 * the error function is executed and the necessary event is
 			 * triggered. A response code of 200 doesn't not mean successful 
 			 * login. So, we have to check the returned object for errors
 			 * in the success callback
 			 */ 
-			this.model.save(u,{
+			this.loginModel.save(u,{
 				silent: false,
 				sync: true,
 				success: function(model, res){
@@ -60,8 +61,9 @@ define('HeaderView', [
 						that.renderErrMsg(res.err);
 					} else {
 						$('.dropdown.open .dropdown-toggle').dropdown('toggle');
-						model.session = res.session;
-						model.trigger('loginSuccess');
+						// model.session = res.session;
+						// model.trigger('loginSuccess');
+						App.EventBus.trigger('login:success', { session: res.session });
 					}
 				},
 				error: function(model, res){

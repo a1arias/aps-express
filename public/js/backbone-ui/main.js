@@ -46,8 +46,8 @@ requirejs.config({
 });
 
 require(['app'], function(app){
-	UI = {};
-	UI = app;
+	App = {};
+	App = app;
 
-	UI.initialize();
+	App.initialize();
 });

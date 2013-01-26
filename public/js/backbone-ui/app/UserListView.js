@@ -2,7 +2,7 @@ define('UserListView', [
 	'jquery',
 	'underscore',
 	'backbone',
-	'text!../../../users',
+	'text!../tpl/users/list.html',
 	'UserCollection'
 	], function($, _, BackBone, tpl, UserCollection){
 		var UserListView;
@@ -25,7 +25,7 @@ define('UserListView', [
 					error: function(coll, res){
 						switch(res.status){
 							case 401:
-								UI.eventDispatcher.trigger('API401');
+								App.EventBus.trigger('response:401');
 								break;
 							case 404:
 							case 500:

@@ -8,26 +8,14 @@ var express = require('express')
 	RedisStore = require('connect-redis')(express),
 	hash = require('./lib/pass').hash,
 	auth = require('./lib/auth'),
+	restrict = auth.restrict,
+	authenticate = auth.authenticate,
 	mongoose = require('mongoose'),
 	//db = require('./db'),
 	http = require('http'),
 	jade = require('jade');
 
 var app = module.exports = express();
-
-// resource route factory method
-// TODO: add PUT and POST methods to Edit and Create resources
-// app.resource = function(path, obj){
-// 	this.get(path, obj.index);
-// 	this.get(path + '/:a..:b.:format?', function(req, res){
-// 		var a = parseInt(req.params.a, 10),
-// 			b = parseInt(req.params.b, 10),
-// 			format = req.params.format;
-// 		obj.range(req, res, a, b, format);
-// 	});
-// 	this.get(path + '/:id', obj.show);
-// 	this.del(path + '/:id', obj.destroy);
-// };
 
 // res.message() method 
 // which stores messages in the session
@@ -150,43 +138,7 @@ app.configure('production', function(){
 	mongoose.connect('mongodb://localhost/aps-express-prod');
 });
 
-// resourse route loader
-//app.resource('/users', User);
 
-// hash('foobar', function(err, salt, hash){
-// 	if(err) throw err;
-// 	users.tj.salt = salt;
-// 	users.tj.hash = hash;
-// });
-
-// // TODO: move this to use a real database
-// function authenticate(name, pass, fn){
-// 	if(!module.parent) console.log('authenticating %s:%s', name, pass);
-// 	var user = users[name];
-// 	// query the db for the given username
-// 	if(!user) return fn(new Error('cannot find user'));
-// 	// apply the same algorithm to the POSTed password, applying
-// 	// the hash against the pass/salt, if there is a match we
-// 	// found the user
-// 	hash(pass, user.salt, function(err, hash){
-// 		if(err) return fn(err);
-// 		if(hash == user.hash) return fn(null, user);
-// 		fn(new Error('invalid password'));
-// 	});
-// };
-
-// // method to restrict access to a given route
-// function restrict(req, res, next){
-// 	if(req.session.user){
-// 		next();
-// 	} else {
-// 		req.session.error = 'Access denied!';
-// 		res.redirect('/login');
-// 	}
-// };
-
-var restrict = auth.restrict,
-	authenticate = auth.authenticate;
 
 // TODO: wtf are you putting the header template in an xrh request for?
 app.get('/header', function(req, res){
