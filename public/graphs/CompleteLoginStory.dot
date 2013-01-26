@@ -1,0 +1,35 @@
+digraph G {
+	subgraph cluster0 {
+		node [style=filled];
+		authenticate -> regenerateSession;
+	}
+	subgraph cluster1 {
+		label="authenticate";
+		oneByEmail -> generateHash -> compareHashes -> returnResult;
+	}
+	subgraph cluster2 {
+		label="UI Flow";
+		promptForInput -> captureCreds -> generateHMAC -> POST -> handleResp;
+	}
+	start -> promptForInput;
+	POST -> authenticate;
+	handleResp -> promptForInput;
+	authenticate -> oneByEmail;
+	/**
+	 * if authenticate runs into an error, the server needs to
+	 * send the response right away
+	 **/
+	edge[color=red];
+	{oneByEmail; generateHash; compareHashes} -> returnResult;
+	returnResult -> end;
+	/**
+	 * if authentication is successful return to regenerateSession
+	 **/
+	edge[color=green];
+	returnResult -> regenerateSession;
+
+	regenerateSession -> end;
+
+	start [shape=Mdiamond,label="Login"];
+	end [shape=Msquare,label="send response"];
+}

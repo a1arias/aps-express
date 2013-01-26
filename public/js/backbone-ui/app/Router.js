@@ -40,20 +40,9 @@ define('Router', [
 				var that = this,
 					loginModel = new LoginModel();
 
-				// TODO: add secure cookie parser
-
 				this.headerView = new HeaderView({ 
 					loginModel: loginModel
 				 });
-
-				// this.headerView.model.on('loginSuccess', function(){
-				// 	// delete that.headerView;
-				// 	// that.headerView = new HeaderView({model: model});
-				// 	that.headerView.render(model);
-				// 	//that.navigate('#!/portal', {trigger: true, replace: true});
-				// 	// TODO: re-render header to display logout link
-				// 	that.navigate('#!/home', {trigger: true});
-				// });
 
 				App.EventBus.on('response:401', function(obj){
 					Session.setItem('lastUrl', obj.hash);
@@ -65,7 +54,6 @@ define('Router', [
 				});
 
 				App.EventBus.on('login:success', function(obj){
-					debugger;
 					that.headerView.render({user: obj.session});
 					that.navigate(Session.getItem('lastUrl'), {trigger: true});
 					Session.removeItem('lastUrl');

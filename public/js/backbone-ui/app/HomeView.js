@@ -2,11 +2,11 @@ define('HomeView', [
 	'jquery',
 	'underscore',
 	'backbone',
-	'text!../../../'
+	'text!../tpl/index.html'
 ], function($, _, BackBone, tpl){
 	var HomeView;
 
-	Homeview = BackBone.View.extend({
+	HomeView = BackBone.View.extend({
 
 		initialize: function(){
 			this.template = _.template(tpl);
@@ -18,5 +18,5 @@ define('HomeView', [
 		}
 	});
 
-	return Homeview;
+	return HomeView;
 });

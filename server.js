@@ -26,57 +26,6 @@ app.response.message = function(msg){
 	return this;
 };
 
-// fake records
-// TODO: setup mongodb and use real records
-// var users = [
-// 	{ 
-// 		tj: { name: 'tj' } 
-// 	}, {
-// 		ciaran: { name: 'ciaran' }	
-// 	}
-// 	{ name: 'ciaran' },
-// 	{ name: 'aaron' },
-// 	{ name: 'guillermo' },
-// 	{ name: 'simon' },
-// 	{ name: 'tobi' }
-// ];
-// var users = {
-// 	tj: {name: 'tj'}
-// };
-//var users = db.users;
-
-// fake controller
-// TODO: move this off to routes and setup a loader
-// var User = {
-// 	index: function(req, res){
-// 		res.send(users);
-// 	},
-// 	show: function(req, res){
-// 		res.send(users[req.params.id] || { error: 'Cannot find user' });
-// 	},
-// 	destroy: function(req, res){
-// 		var id = req.params.id;
-// 		var destroyed = id in users;
-// 		delete users[id];
-// 		res.send(destroyed ? 'destroyed' : 'Cannot find user');
-// 	},
-// 	range: function(req, res, a, b, format){
-// 		var range = users.slice(a, b + 1);
-// 		switch (format) {
-// 			case 'json':
-// 				res.send(range);
-// 				break;
-// 			case 'html':
-// 			default:
-// 				var html = '<ul>' + range.map(function(user){
-// 					return '<li>' + user.name + '</li>';
-// 				}).join('\n') + '</ul>';
-// 				res.send(html);
-// 				break;
-// 		}
-// 	}
-// };
-
 app.configure(function(){
 	app.set('port', process.env.PORT || 3000);
 	app.set('views', __dirname + '/views');
@@ -92,29 +41,10 @@ app.configure(function(){
 		secret: 'TripToItalyComingSoon',
 		cookie: {httpOnly: false, maxAge: 900000 }
 	}));
-	// session-persisted message middleware
-	// app.use(function(req, res, next){
-	// 	var err = req.session.error,
-	// 			msg = req.session.success;
-	// 	delete req.session.error;
-	// 	delete req.session.success;
-	// 	res.locals.message = '';
-	// 	if (err) res.locals.message = '<p class="msg error">' + err + '</p>';
-	// 	if (msg) res.locals.message = '<p class="msg success">' + msg + '</p>';
-	// 	next();
-	// });
-
 	app.use(function(req, res, next){
 		var msgs = req.session.messages || [];
 		res.locals.messages = msgs;
 		res.locals.hasMessages = !! msgs.length;
-		/*
-		 * this is the equivalent:
-			res.locals({
-				messages: msgs,
-				hasMessages: !!msgs.length
-			});
-		 */
 		req.session.messages = [];
 		next();
 	});

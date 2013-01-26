@@ -1,6 +1,9 @@
-digraph G {
+digraph Session {
+	Session -> initialize -> getCookies;
 	Session -> create;
-	Session -> destroy;
+	Session -> destroy -> clear;
 	Session -> getItem;
 	Session -> setItem;
+	Session -> removeItem;
+	Session -> clear;
 }

@@ -1,8 +1,7 @@
 define('Session', [
 	'jquery',
-	'underscore',
-	'backbone'
-], function($, _, Backbone){
+	'underscore'
+], function($, _){
 	var Session;
 
 	var _isAuthed = false,
@@ -33,33 +32,45 @@ define('Session', [
 			if(ENV.WEBSTORAGE_ENABLED){
 				sessionStorage.setItem('sessionId', cookies['sid']);
 			} else {
-				Session.sessionId = cookies['sid'];
+				SessionStore[sessionId] = cookies['sid'];
 			}
 		},
 		create: function(){
 			return _.extend({}, this)
+		},
+		destroy: function(){
+			_isAuthed = false;
+			_sessionId = '';
+			this.clear();
 		},
 		isAuthed: function(){ return _isAuthed; },
 		getItem: function(item){ 
 			if(ENV.WEBSTORAGE_ENABLED){
 				return sessionStorage.getItem(item);
 			} else {
-				return Session[item];
+				return SessionStore[item];
 			}
 		},
 		setItem: function(item, obj){
 			if(ENV.WEBSTORAGE_ENABLED){
 				sessionStorage.setItem(item,obj);
 			} else {
-				Session[item] = obj;
+				SessionStore[item] = obj;
 			}
 		},
 		removeItem: function(item){
 			if(ENV.WEBSTORAGE_ENABLED){
 				sessionStorage.removeItem(item);
 			} else {
-				delete Session[item];
-			}	
+				delete SessionStore[item];
+			}
+		},
+		clear: function(){
+			if(ENV.WEBSTORAGE_ENABLED){
+				sessionStorage.clear();
+			} else {
+				delete SessionStore;
+			}
 		}
 	};
 
