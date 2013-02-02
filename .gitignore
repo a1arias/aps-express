@@ -1,4 +1,5 @@
 *.sublime-project
 *.sublime-workspace
+.codeintel/
 public/stylesheets/*.css
 node_modules/
