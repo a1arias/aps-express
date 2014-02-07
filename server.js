@@ -42,10 +42,10 @@ app.configure(function(){
 		cookie: {httpOnly: false, maxAge: 900000 }
 	}));
 	app.use(function(req, res, next){
-		var msgs = req.session.messages || [];
-		res.locals.messages = msgs;
-		res.locals.hasMessages = !! msgs.length;
-		req.session.messages = [];
+		// var msgs = req.session.messages || [];
+		// res.locals.messages = msgs;
+		// res.locals.hasMessages = !! msgs.length;
+		// req.session.messages = [];
 		next();
 	});
 	//require('./bootloader')(app, db);
@@ -123,23 +123,20 @@ app.get('/logout', function(req, res){
 
 app.get('/login', function(req, res){
 	
-	// TODO: do something better like redirect the user
-	if(req.session.user){
-		res.redirect('/');
-	}
-
-	// if it gets this far, the session is not valid, login
+	/* if it gets this far the session is not valid 
+	 * the user should login
+	 */
 	if(req.xhr){
 		res.render('bbui/users/login', {
 			title: 'Login',
-			error: req.session.error,
-			message: req.session.success	
+			// error: req.session.error,
+			// message: req.session.success	
 		})
 	} else {
 		res.render('login', {
 			title: 'Login',
-			error: req.session.error,
-			message: req.session.success
+			// error: req.session.error,
+			// message: req.session.success
 		});
 	}
 });
